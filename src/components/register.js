@@ -8,6 +8,8 @@ function Register() {
     password: '',
   });
 
+  const [registrationMessage, setRegistrationMessage] = useState('');
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,7 +22,6 @@ function Register() {
     e.preventDefault();
     try {
       // Make an API call to register the user using formData
-      // You'll need to implement this API call using Axios or Fetch
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -32,9 +33,12 @@ function Register() {
       if (response.ok) {
         // Registration successful
         console.log('User registered successfully');
+        setRegistrationMessage('User registered successfully');
       } else {
         // Registration failed
+        const data = await response.json();
         console.error('User registration failed');
+        setRegistrationMessage(data.message || 'User already exists');
       }
     } catch (error) {
       console.error('Error registering user:', error);
@@ -68,6 +72,8 @@ function Register() {
         />
         <button type="submit">Register</button>
       </form>
+
+      {registrationMessage && <p>{registrationMessage}</p>}
 
       <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>

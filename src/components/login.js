@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -6,19 +7,22 @@ function Login() {
     password: '',
   });
 
+  const [notFoundError, setNotFoundError] = useState(false); // Error flag for user not found
+  const [wrongCredentialsError, setWrongCredentialsError] = useState(false); // Error flag for wrong credentials
+
+  const history = useHistory();
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      // Make an API call to authenticate the user using formData
-      // You'll need to implement this API call using Axios or Fetch
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -27,12 +31,23 @@ function Login() {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        // Login successful
+      if (response.status === 200) {
         console.log('User logged in successfully');
-      } else {
-        // Login failed
-        console.error('User login failed');
+        history.push('/tweetForm'); //redirect to home page
+      } 
+      else if (response.status === 400) {
+        const data = await response.json();
+        if (data.message === 'User not found') {
+          setNotFoundError(true);
+          setWrongCredentialsError(false);
+        }
+      }
+      else {
+        const data = await response.json()
+        if (data.message === 'Invalid password'){
+          setNotFoundError(false);
+          setWrongCredentialsError(true);
+        }
       }
     } catch (error) {
       console.error('Error logging in:', error);
@@ -59,6 +74,8 @@ function Login() {
         />
         <button type="submit">Login</button>
       </form>
+      {notFoundError && <p>User not found</p>}
+      {wrongCredentialsError && <p>Invalid Password</p>}
     </div>
   );
 }
