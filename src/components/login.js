@@ -32,6 +32,13 @@ function Login() {
       });
 
       if (response.status === 200) {
+        const data = await response.json();
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+        }
+        if (data.username) {
+          localStorage.setItem('username', data.username);
+        }
         console.log('User logged in successfully');
         history.push('/tweetForm'); //redirect to home page
       } 

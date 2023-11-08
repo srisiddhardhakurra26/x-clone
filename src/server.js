@@ -4,6 +4,8 @@ const app = express()
 
 const registrationRoutes = require('./routes/registration');
 const loginRoutes = require('./routes/login');
+const tweetRoutes = require('./routes/tweet');
+const tweetsRoutes = require('./routes/tweets');
 
 // Define the MongoDB URI (replace with your actual MongoDB URI)
 const mongoURI = 'mongodb://localhost:27017/x-clone';
@@ -28,6 +30,8 @@ app.use(express.json());
 // Use the route modules
 app.use(registrationRoutes);
 app.use(loginRoutes);
+app.use(tweetRoutes);
+app.use(tweetsRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3001;
