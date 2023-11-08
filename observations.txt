@@ -1,0 +1,19 @@
+Observations:
+
+1. need to have a mongodb database - server
+2. install mongod
+3. mongod should be running in the background
+
+4. write a js code called server.js
+5. server.js connects to mongo database using mongo's local url address 
+(const mongoURI = 'mongodb://localhost:27017/x-clone';)
+6. when running the app in development server you do "npm start" to run the client side
+and "node server.js" to run the server side
+7. node server.js runs the server.js file which connects to the mongodb and allows
+the app to make changes to the db and access it. (server runs on port 3001)
+(client runs on port 3000)
+
+8. you can create a model in the database for use (model is user to store user data)
+9. make changes to the db collection when registering
+
+
