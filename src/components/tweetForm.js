@@ -32,10 +32,8 @@ function TweetForm() {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken'); // Get the token from localStorage
-      const username = localStorage.getItem('user'); // Get the username from localStorage
+      const username = localStorage.getItem('username'); // Get the username from localStorage
       // Make an API call to post the tweet using the 'tweet' state
-      console.log('Tweet:', tweet);
-      console.log('Username:', username);
       const response = await fetch('/api/postTweet', {
         method: 'POST',
         headers: {

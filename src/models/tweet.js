@@ -4,7 +4,7 @@ const tweetSchema = new mongoose.Schema({
   text: String,
   author: {
     type: String,
-    required: true, // Reference to the User model
+    required: true,
   },
   timestamp: { type: Date, default: Date.now },
 });
