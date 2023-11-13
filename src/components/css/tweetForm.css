@@ -1,0 +1,25 @@
+.username {
+    font-size: smaller;
+    font-weight: bolder;
+  }
+  
+.post-content {
+    font-weight: light;
+  }
+
+.timestamp {
+    font-size: smaller;
+    font-weight: lighter;
+    opacity: 1.3;
+  }
+  
+.timestamp {
+  position: absolute;
+  top: 10px; /* Adjust the value to bring it down */
+  right: 8px; /* Adjust the value to position it from the right */
+  font-size: 12px;
+}
+
+.timestamp-right {
+  font-size: 12px;
+}
