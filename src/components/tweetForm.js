@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 import './css/tweetForm.css'; // Import your custom CSS file
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import UserProfile from './userprofile'; // Import the UserProfile component
 
 function TweetForm() {
   const [tweet, setTweet] = useState('');
@@ -104,6 +106,7 @@ function TweetForm() {
 const isPostButtonDisabled = tweet.trim() === ''; // Check if tweet is empty or contains only whitespace
 
 return (
+  <Router>
   <div className="bg-dark text-light min-vh-100">
     <div className="container mt-4 p-4">
       <div className="row">
@@ -135,7 +138,11 @@ return (
             <div key={tweet._id} className="card mb-3 bg-dark text-light">
               <div className="card-body">
                 <h5 className="card-title">
-                  <span className="username font-weight-bold">{tweet.author}</span>
+                  {/* Link to the user profile using React Router */}
+                  <span className="username font-weight-bold" style={{ cursor: 'pointer' }} onClick={() => window.location.href = `/profile/${tweet.author}`}>
+                        {tweet.author}
+                  </span>
+                  {/* <span className="username font-weight-bold">{tweet.author}</span> */}
                   <small className="text-muted timestamp">
                     {' '}
                     <span className="text-light">{' '}{new Date(tweet.timestamp).toLocaleString()}</span>
@@ -159,6 +166,10 @@ return (
           </div>
         </div>
       </div>
+      {/* Define the route for the UserProfile component */}
+      <Switch>
+            <Route path="/profile/:username" component={UserProfile} />
+          </Switch>
       <div className="row mt-3">
         <div className="col-md-6">
           <button className="btn btn-danger" onClick={handleLogout}>
@@ -168,6 +179,7 @@ return (
       </div>
     </div>
   </div>
+  </Router>
 );
 }
 
