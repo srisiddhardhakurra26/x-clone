@@ -139,7 +139,7 @@ return (
               <div className="card-body">
                 <h5 className="card-title">
                   {/* Link to the user profile using React Router */}
-                  <span className="username font-weight-bold" style={{ cursor: 'pointer' }} onClick={() => window.location.href = `/profile/${tweet.author}`}>
+                  <span className="username font-weight-bold" style={{ cursor: 'pointer' }} onClick={() => window.location.href = `/userProfile/${tweet.author}`}>
                         {tweet.author}
                   </span>
                   {/* <span className="username font-weight-bold">{tweet.author}</span> */}

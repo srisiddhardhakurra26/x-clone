@@ -15,7 +15,7 @@ function App() {
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
         <Route path="/navigation" component={Navigation} />
-        <Route path="/profile/:username" component={UserProfile} />
+        <Route path="/userProfile/:username" component={UserProfile} />
         <Route path="/tweetForm" component={TweetForm} />
       </Switch>
     </Router>

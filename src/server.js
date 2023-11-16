@@ -1,6 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express()
+const cors = require('cors');
+
+// Enable CORS
+app.use(cors());
+
 
 const registrationRoutes = require('./routes/registration');
 const loginRoutes = require('./routes/login');
