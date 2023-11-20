@@ -9,9 +9,8 @@ router.get('/api/userProfile/:username', async (req, res) => {
     const username = req.params.username;
 
     // Fetch user details
-    console.log('Fetching user profile for username:', username);
+    // console.log('Fetching user profile for username:', username);
     const user = await User.findOne({ name: username });
-    console.log('User found:', user);
 
 
     if (!user) {

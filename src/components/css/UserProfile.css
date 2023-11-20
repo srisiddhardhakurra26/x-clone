@@ -1,0 +1,19 @@
+/* UserProfile.css */
+.dark-mode {
+    background-color: #333;
+    color: #070606;
+  }
+  
+  .dark-mode-card {
+    background-color: #515151;
+  }
+  
+  .dark-mode-list {
+    background-color: #060606;
+    color: #fff;
+  }
+  
+  .text-light {
+    color: #fff !important;
+  }
+  
