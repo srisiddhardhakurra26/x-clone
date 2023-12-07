@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 // with this line
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 
@@ -48,7 +50,7 @@ app.use(userProfile);
 // New route for image generation
 app.post('/api/generateImage', async (req, res) => {
   const { prompt } = req.body;
-  const apiKey = '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'; // Replace with your OpenAI API key
+  const apiKey = process.env.OPENAI_API_KEY;
 
   try {
     const response = await fetch('https://api.openai.com/v1/images/generations', {
@@ -58,10 +60,10 @@ app.post('/api/generateImage', async (req, res) => {
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'dall-e-2',
+        model: 'dall-e-3',
         prompt: prompt,
         n: 1,
-        size: '256x256',
+        size: '1024x1024',
       }),
     });
 
@@ -70,8 +72,8 @@ app.post('/api/generateImage', async (req, res) => {
       const imageUrl = data.data[0].url;
       res.json({ imageUrl });
     } else {
-      console.error('Image generation failed');
-      res.status(500).json({ error: 'Internal Server Error' });
+      console.error('Image generation failed:', await response.text());
+      res.status(500).json({ error: 'Image generation failed' });
     }
   } catch (error) {
     console.error('Error generating image:', error);
