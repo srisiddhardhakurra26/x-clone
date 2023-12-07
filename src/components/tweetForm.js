@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
+// import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 import './css/tweetForm.css'; // Import your custom CSS file
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import UserProfile from './userprofile'; // Import the UserProfile component
@@ -9,6 +9,33 @@ function TweetForm() {
   const [tweets, setTweets] = useState([]);
   const [charCount, setCharCount] = useState(0);
   const maxCharCount = 280; // Set your character limit
+  const [imagePrompt, setImagePrompt] = useState('');
+  const [generatedImageUrl, setGeneratedImageUrl] = useState('');
+
+  const handleImagePromptChange = (e) => {
+    setImagePrompt(e.target.value);
+  };
+
+  const handleGenerateImage = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/generateImage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: imagePrompt }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setGeneratedImageUrl(data.imageUrl);
+      } else {
+        console.error('Image generation failed');
+      }
+    } catch (error) {
+      console.error('Error generating image:', error);
+    }
+  };
 
   const loggedInUsername = localStorage.getItem('username');
 
@@ -123,6 +150,24 @@ return (
                 rows={4}
               />
             </div>
+             {/* New: Add a prompt box for image generation */}
+             <div className="mb-3">
+                  <textarea
+                    value={imagePrompt}
+                    onChange={handleImagePromptChange}
+                    className="form-control bg-dark text-light"
+                    placeholder="Enter prompt for image generation"
+                    rows={2}
+                  />
+                </div>
+                <button type="button" className="btn btn-success" onClick={handleGenerateImage}>
+                  Generate Image
+                </button>
+                {generatedImageUrl && (
+                  <div className="mt-2">
+                    <img src={generatedImageUrl} alt="Generated art" className="img-fluid" />
+                  </div>
+                )}
             <div className={getCharCountStyle()}>
               {charCount}/{maxCharCount}
             </div>
