@@ -8,14 +8,16 @@ function TweetForm() {
   const [tweet, setTweet] = useState('');
   const [tweets, setTweets] = useState([]);
   const [charCount, setCharCount] = useState(0);
-  const maxCharCount = 280; // Set your character limit
+  const maxCharCount = 600; // Set your character limit
   const [imagePrompt, setImagePrompt] = useState('');
   const [generatedImageUrl, setGeneratedImageUrl] = useState('');
+  const [selectedImageFile, setSelectedImageFile] = useState(null); // Define selectedImageFile state
 
+  // eslint-disable-next-line
   const handleImagePromptChange = (e) => {
     setImagePrompt(e.target.value);
   };
-
+  // eslint-disable-next-line
   const handleGenerateImage = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/generateImage', {
@@ -28,6 +30,10 @@ function TweetForm() {
 
       if (response.ok) {
         const data = await response.json();
+        
+        // New: Append the image to the tweet content
+        const newTweetContent = `${tweet}\n![Generated Image](${data.imageUrl})`;
+        setTweet(newTweetContent);
         setGeneratedImageUrl(data.imageUrl);
       } else {
         console.error('Image generation failed');
@@ -63,18 +69,31 @@ function TweetForm() {
     setCharCount(newTweet.length);
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImageFile(file);
+    }
+  };
+
   const handleTweetSubmit = async (e) => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
       const username = localStorage.getItem('username');
+
+      const formData = new FormData();
+      formData.append('text', tweet);
+      formData.append('username', username);
+      formData.append('image', selectedImageFile); // 'selectedImageFile' is the file selected by the user
+
       const response = await fetch('/api/postTweet', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
           'x-auth-token': authToken,
         },
-        body: JSON.stringify({ text: tweet, username: username }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -141,7 +160,18 @@ return (
           <h2 className="text-light">Compose Post</h2>
           <form onSubmit={handleTweetSubmit}>
             <div className="mb-3">
+            <label htmlFor="imageUpload" className="form-label text-light">
+                Upload Image from Gallery:
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                className="form-control bg-dark text-light"
+                id="imageUpload"
+                onChange={handleImageUpload}
+              />
               <textarea
+                id="tweetTextarea"
                 value={tweet}
                 onChange={handleTweetChange}
                 className="form-control bg-dark text-light"
@@ -150,7 +180,13 @@ return (
                 rows={4}
               />
             </div>
-             {/* New: Add a prompt box for image generation */}
+
+            {generatedImageUrl && (
+                  <div className="mt-2">
+                    <img src={generatedImageUrl} alt="Generated art" className="img-fluid" />
+                  </div>
+                )}
+
              <div className="mb-3">
                   <textarea
                     value={imagePrompt}
@@ -163,11 +199,7 @@ return (
                 <button type="button" className="btn btn-success" onClick={handleGenerateImage}>
                   Generate Image
                 </button>
-                {generatedImageUrl && (
-                  <div className="mt-2">
-                    <img src={generatedImageUrl} alt="Generated art" className="img-fluid" />
-                  </div>
-                )}
+
             <div className={getCharCountStyle()}>
               {charCount}/{maxCharCount}
             </div>
@@ -194,6 +226,13 @@ return (
                   </small>
                 </h5>
                 <p className="card-text post-content" dangerouslySetInnerHTML={{ __html: tweet.text.replace(/\n/g, '<br>') }} />
+                
+                 {/* Display the uploaded image if available */}
+                  {tweet.image && (
+                    <div className="mt-2">
+                      <img src={tweet.image} alt="Uploaded art" className="img-fluid" />
+                    </div>
+                  )}
 
                 {/* Conditionally render the Delete button */}
                 {tweet.author === loggedInUsername && (
