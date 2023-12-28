@@ -7,11 +7,20 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
-
+const allowedOrigins = ['http://your-frontend-domain.com', 'https://your-frontend-domain.com'];
 const app = express();
-
 // Enable CORS
 app.use(cors());
+
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// }));
 
 const registrationRoutes = require('./routes/registration');
 const loginRoutes = require('./routes/login');
@@ -21,7 +30,7 @@ const deleteTweets = require('./routes/deleteTweet');
 const userProfile = require('./routes/userProfile');
 
 // Define the MongoDB URI (replace with your actual MongoDB URI)
-const mongoURI = 'mongodb://localhost:27017/x-clone';
+const mongoURI = process.env.MONGODB_URI;
 
 // Connect to the MongoDB database
 mongoose.connect(mongoURI, {
