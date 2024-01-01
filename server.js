@@ -34,10 +34,7 @@ const userProfile = require('./src/routes/userProfile');
 const mongoURI = process.env.MONGODB_URI;
 
 // Connect to the MongoDB database
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(mongoURI);
 
 // Check if the connection was successful
 const db = mongoose.connection;
