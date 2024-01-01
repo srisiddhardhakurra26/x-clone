@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const cors = require('cors');
 const dotenv = require('dotenv');
+require('dotenv').config({ path: './src/.env' });
 dotenv.config();
 const allowedOrigins = ['http://your-frontend-domain.com', 'https://your-frontend-domain.com'];
 const app = express();
@@ -22,12 +23,12 @@ app.use(cors());
 //   },
 // }));
 
-const registrationRoutes = require('./routes/registration');
-const loginRoutes = require('./routes/login');
-const tweetRoutes = require('./routes/tweet');
-const tweetsRoutes = require('./routes/tweets');
-const deleteTweets = require('./routes/deleteTweet');
-const userProfile = require('./routes/userProfile');
+const registrationRoutes = require('./src/routes/registration.js');
+const loginRoutes = require('./src/routes/login');
+const tweetRoutes = require('./src/routes/tweet');
+const tweetsRoutes = require('./src/routes/tweets');
+const deleteTweets = require('./src/routes/deleteTweet');
+const userProfile = require('./src/routes/userProfile');
 
 // Define the MongoDB URI (replace with your actual MongoDB URI)
 const mongoURI = process.env.MONGODB_URI;
