@@ -30,6 +30,10 @@ const tweetsRoutes = require('./src/routes/tweets');
 const deleteTweets = require('./src/routes/deleteTweet');
 const userProfile = require('./src/routes/userProfile');
 
+const path = require('path');
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
+
 // Define the MongoDB URI (replace with your actual MongoDB URI)
 const mongoURI = process.env.MONGODB_URI;
 
@@ -53,6 +57,11 @@ app.use(tweetRoutes);
 app.use(tweetsRoutes);
 app.use(deleteTweets);
 app.use(userProfile);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 // New route for image generation
 app.post('/api/generateImage', async (req, res) => {
